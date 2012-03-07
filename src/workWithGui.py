@@ -8,7 +8,7 @@ import sys
 import threading
 from wikiWorker import wikiWorker
 from ParserAndCreatorFactory import ParserAndCreatorFactory
-
+# Work
         
 class MainWindow(QWidget):
     def __init__(self, parent = None):
