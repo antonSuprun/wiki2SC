@@ -8,28 +8,23 @@ from wikiWorker import wikiWorker
 from ParserAndCreatorFactory import ParserAndCreatorFactory
 from compiler.ast import Printnl
 
-def work():
-    ob = wikiWorker('http://ru.wikipedia.org/w/api.php')
-    #ob.startPoint('http://ru.wikipedia.org/w/api.php', u'Венера_(планета)')
-    templates = ob.templatesFromPage(u'Уран_(планета)')
-    myFactory = ParserAndCreatorFactory()
-    
-    for template in templates:
-        templateName =ob.getTamplateName(template)
-        parser = myFactory.getParser(templateName)
-        information = parser.parse(template)
-        creator = myFactory.getCreator(templateName)
-        result=creator.create(information)
-        path='C:\\Users\\Burger\\Desktop\\'
-        print path,result['name']
-        f = file(unicode(path+result['name'])+'.gwf',"w")
-        f.write(result['information'])
-        f.close()
-        
-        print templateName,'-',result['name']
 
-gui=False
-if gui:
-    import workWithGui
-    workWithGui.work()
-else: work()
+def parseTemplete(path,template,templateName,myFactory):
+    parser = myFactory.getParser(templateName)
+    information = parser.parse(template)
+    creator = myFactory.getCreator(templateName)
+    result=creator.create(information)
+        
+    f = file(unicode(path+result['name'])+'.gwf',"w")
+    f.write(result['information'])
+    f.close()
+
+
+def work(worker,firstPage,pathToSave):
+    templates = worker.templatesFromPage(firstPage)
+    myFactory = ParserAndCreatorFactory()
+    for template in templates:
+        parseTemplete(pathToSave,template,worker.getTamplateName(template),myFactory)   
+
+worker=wikiWorker('http://ru.wikipedia.org/w/api.php')
+work(worker,u'Уран_(планета)','C:\\Users\\Burger\\Desktop\\')

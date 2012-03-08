@@ -4,7 +4,6 @@ Created on 27.02.2012
 
 @author: Burger
 '''
-from pyparsing_py2 import *
 import re
 
 def fromText(text):
