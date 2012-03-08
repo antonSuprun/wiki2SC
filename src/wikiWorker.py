@@ -49,16 +49,15 @@ class wikiWorker():
             self._site = wiki.Wiki(self._nameSite)
         return self._site
     
-    def _addOrMarkLink(self,link, was = False):
-        if not link in self._links:
-            self._links[link] = was
+    def addOrMarkLink(self,link, was = False):
+        self._links[link] = was
     
     def startPoint(self, siteName, pageName):
         self._site = self._openSite(siteName)
         myPage = page.Page(self._site, pageName)
-        self._addOrMarkLink(pageName)
+        self.addOrMarkLink(pageName)
         for link in myPage.getLinks():
-            self._addOrMarkLink(link)
+            self.addOrMarkLink(link)
     
     def getTamplateName(self, template = None):
         name = ""

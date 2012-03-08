@@ -20,11 +20,12 @@ def parseTemplete(path,template,templateName,myFactory):
     f.close()
 
 
-def work(worker,firstPage,pathToSave):
-    templates = worker.templatesFromPage(firstPage)
+def work(worker,page,pathToSave):
+    templates = worker.templatesFromPage(page)
     myFactory = ParserAndCreatorFactory()
     for template in templates:
-        parseTemplete(pathToSave,template,worker.getTamplateName(template),myFactory)   
+        parseTemplete(pathToSave,template,worker.getTamplateName(template),myFactory)
+    worker.addOrMarkLink(page, True)
 
 worker=wikiWorker('http://ru.wikipedia.org/w/api.php')
 work(worker,u'Уран_(планета)','C:\\Users\\Burger\\Desktop\\')
