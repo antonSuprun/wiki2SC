@@ -67,8 +67,8 @@ class wikiWorker():
                 name = name + sim
             elif sim == '|':
                 break
-        return name.lower()
-    
+        return unicode(name).lower()
+        
     def templatesFromPage(self, pageName):
         self._site = self._openSite()
         myPage = page.Page(self._site, pageName)

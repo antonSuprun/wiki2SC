@@ -7,7 +7,7 @@ Created on 27.02.2012
 from pyparsing_py2 import *
 import re
 
-def templateFromtext(text):
+def fromText(text):
     templates = []
     kol = 0
     template = ""
@@ -20,6 +20,21 @@ def templateFromtext(text):
         elif sim == '}': kol = kol - 1
         if kol != 0: template = template + sim
     if template!='' and kol==0: templates.append(template)
+    prev=''
+    our=False
+    templete=''   
+    for sim in text:
+        if sim=='!' and prev=='<':
+            our=True
+            templete=prev+sim
+        elif sim!='>' and our:
+            templete=templete+sim
+        elif sim=='>':
+            templates.append(templete)
+            templete=''
+            our=False
+        prev=sim
+    
     return templates
 
 class baseParser():
@@ -43,19 +58,22 @@ class baseParser():
         return text
     
     def templateUnification(self,template):
-        dell=templateFromtext(template[2:len(template)])
+        dell=fromText(template[2:len(template)])
         for templ in dell:
             template=re.sub(templ,'', template)
         template=re.sub('<br />','\n', template)
         template=re.sub(r'\[.*|.*\]','', template)
-        template=re.sub(r'<!.*>','',template)
         template=re.sub('&nbsp;','', template)
         template=re.sub('<ref.*>','', template)
         template=re.sub('</ref>','', template)
-        dell=templateFromtext(template[2:len(template)])
-        for templ in dell:
-            template=re.sub(templ,'', template)
-  
+        template=re.sub('<sup>','^',template)
+        template=re.sub('</sup>','',template)
+        
+        template=re.sub('<','&lt;',template)
+        template=re.sub('&','&amp;',template)
+        template=re.sub('>','&gt;',template)
+        template=re.sub('"','&quot;',template)
+         
         return template
     
     def _keyValue(self, template):

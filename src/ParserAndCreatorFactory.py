@@ -12,10 +12,10 @@ class ParserAndCreatorFactory():
     _creators = {}
     def __init__(self):
         a = planetParser()
-        self._parsers['карточка планеты'] = a
+        self._parsers[u'карточка планеты'] = a
         
         b = planetCreator()
-        self._creators['карточка планеты'] = b
+        self._creators[u'карточка планеты'] = b
                 
     def getParser(self, information):
         if information in self._parsers:

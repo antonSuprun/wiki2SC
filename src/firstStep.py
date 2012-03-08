@@ -11,7 +11,7 @@ from compiler.ast import Printnl
 def work():
     ob = wikiWorker('http://ru.wikipedia.org/w/api.php')
     #ob.startPoint('http://ru.wikipedia.org/w/api.php', u'Венера_(планета)')
-    templates = ob.templatesFromPage(u'Марс')
+    templates = ob.templatesFromPage(u'Уран_(планета)')
     myFactory = ParserAndCreatorFactory()
     
     for template in templates:
