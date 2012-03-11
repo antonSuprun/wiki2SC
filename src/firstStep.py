@@ -21,7 +21,7 @@ def parseTemplete(path,template,templateName,myFactory):
 
 
 def workWithPage(worker,page,pathToSave):
-    worker.addOrMarkLink(page, True)
+    worker.add(page)
     templates = worker.templatesFromPage(page)
     result=False
     try:
@@ -41,6 +41,7 @@ def work(worker,page,pathToSave):
     while(1):
         newWave=[]
         for link in links:
+            if worker.was(link):continue
             print link,
             if workWithPage(worker,link, pathToSave):
                 newWave=newWave+worker.getLinksFromPage(link)
