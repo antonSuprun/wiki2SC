@@ -40,6 +40,7 @@ def work(worker,page,pathToSave):
     links=[page]
     while(1):
         newWave=[]
+        print '--------------------------',len(links),'---------------------------------'
         for link in links:
             if worker.was(link):continue
             print link,
@@ -47,6 +48,7 @@ def work(worker,page,pathToSave):
                 newWave=newWave+worker.getLinksFromPage(link)
                 print ' yes'
             else: print ' no'
+        links=[]
         if len(newWave)>0:
             links=newWave
         else:break
