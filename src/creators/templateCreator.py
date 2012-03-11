@@ -4,9 +4,6 @@ Created on 27.02.2012
 
 @author: Burger
 '''
-import datetime
-import re
-
 class baseCreator():
     forId=1
     names=[]
@@ -71,14 +68,10 @@ class planetCreator(baseCreator):
             arc=self.genArc(b_x=x, b_y=y,id_b=relation['id'], id_e=pair['id'], space=space, dotBBalance=0.5)
             result=result+pair['arc']+arc['arc']            
             y=y+120
-     
-        #bus=space+'<bus type="" idtf="" shapeColor="0" id="64731704" parent="0" owner="63495480" b_x="139.739" b_y="63.4977" e_x="139.739" e_y="'+str(y-50)+'">\n'
-        #bus=bus+space+'    <points/>\n'+space+'</bus>\n'
-        
+             
         space='    '
         result=result+space+'</staticSector>\n'
         result=result+'</GWF>\n'
-        result=re.sub('&','&amp;', result)
         answer={'name':information['название'],'information':result}
         return answer
 

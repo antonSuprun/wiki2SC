@@ -51,6 +51,10 @@ class wikiWorker():
     
     def addOrMarkLink(self,link, was = False):
         self._links[link] = was
+        
+    def getLinksFromPage(self,pageName):
+        myPage = page.Page(self._site, pageName)
+        return myPage.getLinks()
     
     def startPoint(self, siteName, pageName):
         self._site = self._openSite(siteName)
@@ -71,6 +75,7 @@ class wikiWorker():
     def templatesFromPage(self, pageName):
         self._site = self._openSite()
         myPage = page.Page(self._site, pageName)
+        if not myPage.exists: return []
         pageText = myPage.getWikiText()
         pageTemplates = []
         kol = 0

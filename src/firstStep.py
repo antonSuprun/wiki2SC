@@ -6,7 +6,7 @@ Created on 15.02.2012
 '''
 from wikiWorker import wikiWorker
 from ParserAndCreatorFactory import ParserAndCreatorFactory
-from compiler.ast import Printnl
+from compiler.ast import Printnl, TryFinally
 
 
 def parseTemplete(path,template,templateName,myFactory):
@@ -20,12 +20,35 @@ def parseTemplete(path,template,templateName,myFactory):
     f.close()
 
 
-def work(worker,page,pathToSave):
-    templates = worker.templatesFromPage(page)
-    myFactory = ParserAndCreatorFactory()
-    for template in templates:
-        parseTemplete(pathToSave,template,worker.getTamplateName(template),myFactory)
+def workWithPage(worker,page,pathToSave):
     worker.addOrMarkLink(page, True)
+    templates = worker.templatesFromPage(page)
+    result=False
+    try:
+        if(len(templates)>0):
+            result=True
+            myFactory = ParserAndCreatorFactory()
+            for template in templates:
+                parseTemplete(pathToSave,template,worker.getTamplateName(template),myFactory)
+    except:
+        print 'ERROR page--',page,'\n'
+        result=False
+                  
+    return result
+
+def work(worker,page,pathToSave):
+    links=[page]
+    while(1):
+        newWave=[]
+        for link in links:
+            print link,
+            if workWithPage(worker,link, pathToSave):
+                newWave=newWave+worker.getLinksFromPage(link)
+                print ' yes'
+            else: print ' no'
+        if len(newWave)>0:
+            links=newWave
+        else:break
 
 worker=wikiWorker('http://ru.wikipedia.org/w/api.php')
 work(worker,u'Уран_(планета)','C:\\Users\\Burger\\Desktop\\')
