@@ -11,7 +11,7 @@ from wikitools import page
 class wikiWorker():
     _site = None
     _nameSite = None
-    _links = {}
+    _links = []
     _templateNames = ['карточка планеты']
     
     def __init__(self, siteName = 'http://en.wikipedia.org/w/api.php'):
@@ -49,8 +49,11 @@ class wikiWorker():
             self._site = wiki.Wiki(self._nameSite)
         return self._site
     
-    def addOrMarkLink(self,link, was = False):
-        self._links[link] = was
+    def add(self,link):
+        self._links.append(link)
+        
+    def was(self,link):
+        return link in self._links
         
     def getLinksFromPage(self,pageName):
         myPage = page.Page(self._site, pageName)
