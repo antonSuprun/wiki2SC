@@ -7,34 +7,67 @@ Created on 16.03.2012
 import sys
 import wiki2SC
 
-from PySide.QtGui import *
+from PySide import QtCore, QtGui
 
-class MainWindow(QMainWindow):
-    def __init__(self, parent = None):
-        super(MainWindow, self).__init__(parent)
-        self.resize(800, 480)
-        self.setWindowTitle("wiki2SC")
-        centralWidget = QWidget(self)
+class MainWindow(QtGui.QWidget):
+    def __init__(self):
+        super(MainWindow, self).__init__()
         
-        self.textBrowser = QTextBrowser()
-        self.pushButton = QPushButton("Start")
-        self.pushButton.setFixedSize(128, 32)
+        logGroup = QtGui.QGroupBox("log")
+        self.logBrowser = QtGui.QTextBrowser()
         
-        layout = QVBoxLayout(centralWidget)
-        layout.addWidget(self.textBrowser)
-        layout.addWidget(self.pushButton)
+        controlGroup = QtGui.QGroupBox("control")
+        
+        choiceComboBox = QtGui.QComboBox()
+        choiceComboBox.addItem("en.wikipedia.org")
+        choiceComboBox.addItem("ru.wikipedia.org")
+        startButton = QtGui.QPushButton("start")
+
+        logLayout = QtGui.QGridLayout()
+        logLayout.addWidget(self.logBrowser, 0, 0)
+        logGroup.setLayout(logLayout)
+        
+        startLayout = QtGui.QGridLayout()
+        startLayout.addWidget(choiceComboBox, 0, 0)
+        startLayout.addWidget(startButton, 1, 0)
+        controlGroup.setLayout(startLayout)
+        
+        layout = QtGui.QGridLayout()
+        layout.addWidget(logGroup, 0, 0)
+        layout.addWidget(controlGroup, 0, 1)
+        
         self.setLayout(layout)
-        self.setCentralWidget(centralWidget)
+        self.resize(800, 480)
+        self.setWindowTitle("wiki2sc")
         
-        self.pushButton.clicked.connect(self.startWork)
+        choiceComboBox.activated[int].connect(self.choiceChanged)
+        startButton.clicked.connect(self.startButton)
+
+    def choiceChanged(self, index):
+        if index == 0:
+            self.logBrowser.clear()
+            self.logBrowser.append("eng")
+        elif index == 1:
+            self.logBrowser.clear()
+            self.logBrowser.append("rus")
     
-    def startWork(self):
-        operator = wiki2SC.wiki2SC(path='D:\\gwf-wiki\\',siteName='http://ru.wikipedia.org/w/api.php',log=self.textBrowser)
+    def startButton(self):
+        self.thread = WorkThread(self.logBrowser)
+        self.thread.start()
+        self.thread.exit()
+        
+class WorkThread(QtCore.QThread):
+    def __init__(self, output):
+        QtCore.QThread.__init__(self)
+        self.output = output
+        
+    def run(self):
+        operator = wiki2SC.wiki2SC(path='D:\\gwf-wiki\\', siteName='http://ru.wikipedia.org/w/api.php', log = self.output)
         operator.work( page=u'Уран_(планета)')
-        self.textBrowser.append("")
+        self.exec_()
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    frame = MainWindow()
-    frame.show()
+    app = QtGui.QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
     sys.exit(app.exec_())
