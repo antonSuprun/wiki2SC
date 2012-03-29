@@ -14,7 +14,7 @@ class MainWindow(QtGui.QWidget):
         super(MainWindow, self).__init__()
         
         logGroup = QtGui.QGroupBox("log")
-        self.logBrowser = QtGui.QTextBrowser()
+        self.logBrowser = QtGui.QTextBrowser();
         
         controlGroup = QtGui.QGroupBox("control")
         
@@ -45,10 +45,8 @@ class MainWindow(QtGui.QWidget):
 
     def choiceChanged(self, index):
         if index == 0:
-            self.logBrowser.clear()
             self.logBrowser.append("eng")
         elif index == 1:
-            self.logBrowser.clear()
             self.logBrowser.append("rus")
     
     def startButton(self):
