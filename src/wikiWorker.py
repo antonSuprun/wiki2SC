@@ -15,7 +15,7 @@ class wikiWorker():
     _templateNames = ['карточка планеты']
     
     def __init__(self, siteName = 'http://en.wikipedia.org/w/api.php'):
-        self._nameSite = siteName       
+        self._nameSite = siteName
     
     def __pageAndSite__(self,article):
         wikiversion = ""

@@ -11,10 +11,10 @@ class wiki2SC():
     _path=None
     _worker=None
     streamLog=None
-    def __init__(self,path="", siteName = 'http://en.wikipedia.org/w/api.php', log = None):
+    def __init__(self,path="", siteName = 'http://ru.wikipedia.org/w/api.php', log = None):
         self.streamLog = log
         self._path = path
-        self._worker = wikiWorker('http://ru.wikipedia.org/w/api.php')
+        self._worker = wikiWorker(siteName)
     
     def parseTemplete(self,path,template,templateName,myFactory):
         parser = myFactory.getParser(templateName)

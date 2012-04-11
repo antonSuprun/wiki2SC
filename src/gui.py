@@ -45,22 +45,23 @@ class MainWindow(QtGui.QWidget):
 
     def choiceChanged(self, index):
         if index == 0:
-            self.logBrowser.append("eng")
+            self.site = 'http://en.wikipedia.org/w/api.php'
         elif index == 1:
-            self.logBrowser.append("rus")
+            self.site = 'http://ru.wikipedia.org/w/api.php'
     
     def startButton(self):
-        self.thread = WorkThread(self.logBrowser)
+        self.thread = WorkThread(self.logBrowser, self.site)
         self.thread.start()
         self.thread.exit()
         
 class WorkThread(QtCore.QThread):
-    def __init__(self, output):
+    def __init__(self, output, site):
         QtCore.QThread.__init__(self)
         self.output = output
+        self.site = site
         
     def run(self):
-        operator = wiki2SC.wiki2SC(path='D:\\gwf-wiki\\', siteName='http://ru.wikipedia.org/w/api.php', log = self.output)
+        operator = wiki2SC.wiki2SC(path='D:\\gwf-wiki\\', siteName = self.site, log = self.output)
         operator.work( page=u'Уран_(планета)')
         self.exec_()
 
